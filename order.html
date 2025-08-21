@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Home | Thamaga Super Market</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    
+    <div class="header ">
+
+        <div class="side-nav">
+            <div class="logo">
+                <img src="logo.webp" alt="Thamaga super market logo" class="logo-png">
+                <div>
+                    <h2>Thamaga Super Market</h2>
+                    <p>thamaga@supermarket</p>
+                </div>
+            </div>
+
+            <ul>
+                <li><a href="index.html">HOME</a></li>
+                <li class="active"><a href="order.html">ORDER PLACEMENT</a></li>
+                <li><a href="about.html">ABOUT US</a></li>
+            </ul>
+        </div>
+        <div class="page-body">
+            <h1>Welcome to THAMAGA SUPER MARKET</h1>
+        </div>
+
+        <section class="product-grid bluryContent">
+            <div class="second">
+                <h2>Todays Special</h2>
+                <p>YOUR TRUSTED STORE FOR QUALITY drinks. Sort yourself with pride.</p>
+                <div class="grid-container order-form">
+
+                    <div class="product-card">
+                        <img src="HEINEKEN.png">
+                        <h3>HEINEKEN BEER SILVER</h3>
+                        <p>Price: R15.99 per KG</p>
+                        <p>Size: 330ml</p>
+                        <button class="btn">Add Item</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="FLYING FISH.webp">
+                        <h3>FLYING FISH</h3>
+                        <p>Price: R18.99 per KG</p>
+                        <p>Size: 330ml</p>
+                        <button class="btn">Add Item</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="black-label-TRANS.png">
+                        <h3>BLACK LABEL</h3>
+                        <p>Price: R14.99 per KG</p>
+                        <p>Size: 330ml</p>
+                        <button class="btn">Add Item</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="castlemilkstout.png">
+                        <h3>MILK STOUT</h3>
+                        <p>Price: R13.99 per KG</p>
+                        <p>Size: 330ml</p>
+                        <button class="btn">Add Item</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+        <section class="form-info">
+            <form>
+                <h2>PLACE YOUR ORDER</h2>
+
+                <div class="input-box">
+                    <label for="fname">Full Names:</label>
+                    <input type="text" id="fname" name="fname" required placeholder="Enter your name">
+                </div>
+
+
+
+                <div class="input-box">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                </div>
+
+                <div class="input-box">
+                    <label for="totalPrice">Total Price:</label>
+                    <input type="text" id="totalPrice" name="totalPrice" readonly value="R0.00">
+                </div>
+
+
+                <button type="submit" class="btn submit-form">Place Order</button>
+            </form>
+
+        </section>
+   </div>
+
+    <script>
+    let cart = [];
+    let totalPriceField = document.getElementById("totalPrice");
+
+    
+    function updateTotalPrice() {
+        let total = 0;
+        cart.forEach(item => {
+            total += item.price * item.quantity;
+        });
+        totalPriceField.value = "R" + total.toFixed(2);
+    }
+
+    document.querySelectorAll(".product-card .btn").forEach((btn) => {
+        btn.addEventListener("click", function () {
+            const productCard = btn.closest(".product-card");
+            const name = productCard.querySelector("h3").innerText;
+            const priceText = productCard.querySelector("p").innerText;
+            const price = parseFloat(priceText.replace(/[^0-9.]/g, ""));
+
+            let existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+
+            updateTotalPrice();
+        });
+    });
+
+    
+    document.querySelector("form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const fullName = document.getElementById("fname").value;
+        const email = document.getElementById("email").value;
+        const quantity = document.getElementById("quantity").value;
+
+        if (cart.length === 0) {
+            alert("Please add at least one item to your cart before placing an order.");
+            return;
+        }
+
+        let orderDetails = "";
+        let total = 0;
+        cart.forEach(item => {
+            let itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            orderDetails += `${item.name} - Qty: ${item.quantity} - R${itemTotal.toFixed(2)}\n`;
+        });
+
+        alert(
+            `Thank you, ${fullName}!\n\n` +
+            `Your order has been placed successfully.\n` +
+            `Email: ${email}\n\n` +
+            `Items Ordered:\n${orderDetails}\n` +
+            `Total: R${total.toFixed(2)}`
+        );
+
+        cart = [];
+        this.reset();
+        updateTotalPrice();
+    });
+</script>
+
+</body>
+
+</html>
+
+
+
+    
